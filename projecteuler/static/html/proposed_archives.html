@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="common-centered">
+    <h1 align="center">Proposed Tasks</h1>
+</div>
+
+<div class="task-line-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <a href="/proposed_archives?sort_by=id&sort_order=asc">
+                    <span class="typcn typcn-arrow-sorted-up"></span>
+                </a>
+                <br>
+                <a>ID</a>
+                <br>
+                <a href="/proposed_archives?sort_by=id&sort_order=desc">
+                    <span class="typcn typcn-arrow-sorted-down"></span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <br>
+                <a>Title</a>
+                <br>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-1">
+                <a href="/proposed_archives?sort_by=difficulty&sort_order=asc">
+                    <span class="typcn typcn-arrow-sorted-up"></span>
+                </a>
+                <br>
+                <a>Difficulty</a>
+                <br>
+                <a href="/proposed_archives?sort_by=difficulty&sort_order=desc">
+                    <span class="typcn typcn-arrow-sorted-down"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for task in tasks %}
+<div class="task-line">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <a>{{task['id']}}</a>
+            </div>
+            <div class="col-md-6">
+                <a href="/proposed_task?id={{task['id']}}">{{task['title']}}</a>
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-1">
+                <a>{{task['difficulty']}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div style="margin-bottom: 100px"></div>
+
+<div class="my-pagination-1">
+    <nav class="my-pagination-2">
+        <a href="publish_yourself" style="text-align: center">Publish your own task</a>
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="/proposed_archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&page=1">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   {% if page != 1 %}
+                   href="/proposed_archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&page={{page-1}}"
+                   {% endif %}
+                >
+                <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link">{{page}}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   {% if page != last_page %}
+                   href="/proposed_archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&page={{page+1}}"
+                   {% endif %}
+                >
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="/proposed_archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&page={{last_page}}">{{last_page}}</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css"/>
+
+{% endblock %}

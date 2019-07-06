@@ -1,0 +1,235 @@
+swagger: "2.0"
+info:
+    version: "1.0"
+    title: Tasks microservice
+    description: |
+        multi
+        line
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+    /tasks/?:
+        get:
+            description: Информация о задаче
+            parameters:
+              - $ref: '#/parameters/id'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/Task'
+                404:
+                    description: Задача не найдена
+        post:
+            description: Публикация задачи
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                  $ref: '#/definitions/Task'
+            responses:
+                201:
+                    description: Задача опубликована
+                    schema:
+                      $ref: '#/definitions/IdObject'
+    /tasks/search/?:
+        post:
+            description: Поиск
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                  $ref: '#/definitions/SearchRequest'
+            responses:
+                200:
+                    description: Список задач, удовлетворяющих условиям поиска
+                    schema:
+                        $ref: '#/definitions/Tasks'
+    /tasks/count/?:
+        get:
+            description: Количество заданий в базе на текущий момент
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/CountObject'
+    /tasks/solve/?:
+        post:
+            description: Увеличение счетчика пользователей, решивших эту задачу
+            parameters:
+              - $ref: '#/parameters/id'
+            responses:
+                200:
+                    description: Ok
+                404:
+                    description: Задача не найдена
+    /proposed_tasks/?:
+        get:
+            description: Информация о предложенной задаче
+            parameters:
+              - $ref: '#/parameters/id'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/TaskObject'
+                404:
+                    description: Задача не найдена
+        post:
+            description: Предложение задачи к публикации
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                  $ref: '#/definitions/Task'
+            responses:
+                201:
+                    description: Задача предложена
+                    schema:
+                        $ref: '#/definitions/IdObject'
+        patch:
+            description: Внесение правок к предложенной задаче
+            parameters:
+              - $ref: '#/parameters/id'
+              - name: body
+                in: body
+                required: true
+                schema:
+                  $ref: '#/definitions/Task'
+            responses:
+                200:
+                    description: Задача обновлена
+                404:
+                  description: Задача не найдена
+        delete:
+            description: Задача была опубликована или отклонена
+            parameters:
+            - $ref: '#/parameters/id'
+            responses:
+              200:
+                  description: Ok
+              404:
+                  description: Задача не найдена
+    /proposed_tasks/search/?:
+        post:
+            description: Поиск предложенных задач
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                  $ref: '#/definitions/SearchRequest'
+            responses:
+                200:
+                    description: Список предложенных задач, удовлетворяющих условиям поиска
+                    schema:
+                        $ref: '#/definitions/Tasks'
+    /proposed_tasks/count/?:
+        get:
+            description: Количество предложенных задач в базе на текущий момент
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/CountObject'
+
+definitions:
+    Task:
+        description: Описание возможных полей для обоих типов заданий
+        type: object
+        properties:
+            id:
+                type: integer
+            title:
+                type: string
+            text:
+                type: string
+            answer:
+                type: string
+            difficulty:
+                type: integer
+            published:
+                type: string
+            proposed:
+                type: string
+            solved_by:
+                type: integer
+        additionalProperties: false
+    Tasks:
+        type: object
+        properties:
+          tasks:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+        required:
+          - tasks
+        additionalProperties: false
+
+    SearchRequest:
+        description: Описание возможных критериев поиска для обоих типов заданий
+        type: object
+        properties:
+            sort_by:
+                type: string
+                enum:
+                  - id
+                  - solved_by
+                  - difficulty
+            sort_order:
+                type: string
+                enum:
+                  - asc
+                  - desc
+            offset:
+                type: integer
+            limit:
+                type: integer
+            solved_ids:
+                type: array
+                items:
+                    type: integer
+            solved:
+                type: string
+                enum:
+                  - "yes"
+                  - "no"
+                  - "all"
+        additionalProperties: false
+
+    TaskObject:
+        type: object
+        properties:
+            task:
+                $ref: '#/definitions/Task'
+        required:
+          - task
+        additionalProperties: false
+    IdObject:
+        type: object
+        properties:
+            id:
+                type: integer
+        required:
+          - id
+        additionalProperties: false
+    CountObject:
+        type: object
+        properties:
+            count:
+                type: integer
+        required:
+          - count
+        additionalProperties: false
+
+parameters:
+      id:
+        description: Уникальный номер задания
+        in: query
+        name: id
+        required: true
+        type: string
+        pattern: ^\d*$

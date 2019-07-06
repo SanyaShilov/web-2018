@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="task">
+    <h1>{{task['title']}}</h1>
+    <h4>Task {{task['id']}}</h4>
+    <div class="bordered">
+        <a>{{task['text']|safe}}</a>
+    </div>
+    {% if user and not solution %}
+    <form class="my-form-small" method="post" action="/task">
+        <input type="hidden" name="id" value="{{task['id']}}" />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="inputAnswer">Answer</label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" id="inputAnswer" placeholder="Answer" name="answer" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-lg btn-primary btn-block" type="submit" style="margin-bottom: 50px">Submit</button>
+            </div>
+        </div>
+    </form>
+    {% elif user %}
+    <div class="answer">answer: {{task['answer']}}</div>
+    {% endif %}
+
+    <div style="margin-bottom: 100px"></div>
+
+    <div class="my-pagination-1">
+        <nav class="my-pagination-2">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="/task?id=1">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                       {% if task['id'] != 1 %}
+                       href="/task?id={{task['id']-1}}"
+                       {% endif %}
+                    >
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link">{{task['id']}}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                       {% if task['id'] != count %}
+                       href="/task?id={{task['id']+1}}"
+                       {% endif %}
+                    >
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/task?id={{count}}">{{count}}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+{% endblock %}

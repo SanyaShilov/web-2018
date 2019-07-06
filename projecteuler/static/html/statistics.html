@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="common-centered">
+    <h1 align="center">Statistics</h1>
+    <a>
+        There are a total of {{statistics['users']}} registered members.<br>
+        A total of {{statistics['countries']}} different countries are represented and
+        {{statistics['programming_languages']}} programming languages are being used to solve the problems.<br>
+        {{statistics['total_solutions']}} correct solutions have been submitted by registered members,
+        which is an average of {{statistics['average_solutions']}} per member.<br>
+    </a>
+    <br>
+    <a>More detailed statistics:</a>
+    <div class="row">
+        <div class="col-md-4">
+            <form class="my-form-small" method="get" action="/statistics">
+                <input type="hidden" name="detailed" value="solutions" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Solutions</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <form class="my-form-small" method="get" action="/statistics">
+                <input type="hidden" name="detailed" value="countries" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Countries</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <form class="my-form-small" method="get" action="/statistics">
+                <input type="hidden" name="detailed" value="programming_languages" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Programming_languages</button>
+            </form>
+        </div>
+    </div>
+
+    {% if 'detailed_solutions' in statistics %}
+        <div class="task-line-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a>Number of tasks</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a>Users who solved exactly</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a>Users who solved at least</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for item in statistics['detailed_solutions'] %}
+            <div class="task-line">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a>{{item['number_of_tasks']}}</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a>{{item['users_solved_exactly']}}</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a>{{item['users_solved_at_least']}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if 'detailed_countries' in statistics %}
+        <div class="task-line-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a>Country</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a>Users</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a>Average solutions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for item in statistics['detailed_countries'] %}
+            <div class="task-line">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a>{{item['country']}}</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a>{{item['users']}}</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a>{{item['average_solutions']}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if 'detailed_programming_languages' in statistics %}
+        <div class="task-line-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a>Programming language</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a>Users</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a>Average solutions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for item in statistics['detailed_programming_languages'] %}
+            <div class="task-line">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a>{{item['programming_language']}}</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a>{{item['users']}}</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a>{{item['average_solutions']}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+{% endblock %}

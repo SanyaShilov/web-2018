@@ -1,0 +1,327 @@
+swagger: "2.0"
+info:
+    version: "1.0"
+    title: Users microservice
+    description: |
+        multi
+        line
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+    /me/?:
+        get:
+            description: Информация об аккаунте
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/UserObject'
+                401:
+                    description: Нет пользователя с таким токеном
+    /change_info/?:
+        post:
+            description: Изменение параметров аккаунта
+            parameters:
+            - name: body
+              in: body
+              required: true
+              schema:
+                  $ref: '#/definitions/ChangeAccountInfoRequest'
+            responses:
+                200:
+                    description: Параметры успешно изменены
+                400:
+                    description: Невалидные параметры запроса
+                401:
+                    description: Нет пользователя с таким токеном
+                422:
+                    description: Пользователь с таким логином или паролем уже существует
+    /register/?:
+        post:
+            description: Регистрация пользователя
+            parameters:
+            - name: body
+              in: body
+              required: true
+              schema:
+                  $ref: '#/definitions/LoginPasswordRequest'
+            responses:
+                201:
+                    description: Пользователь зарегестрирован успешно
+                    schema:
+                        $ref: '#/definitions/TokenObject'
+                400:
+                    description: Невалидный логин или пароль
+                422:
+                    description: Пользователь с таким логином или паролем уже существует
+    /sign_in/?:
+        post:
+            description: Вход пользователя
+            parameters:
+            - name: body
+              in: body
+              required: true
+              schema:
+                  $ref: '#/definitions/LoginPasswordRequest'
+            responses:
+                200:
+                    description: Пользователь вошел успешно
+                    schema:
+                        $ref: '#/definitions/TokenObject'
+                400:
+                    description: Невалидный логин или пароль
+                403:
+                    description: Неверный логин или пароль
+    /sign_out/?:
+        post:
+            description: Выход пользователя
+            responses:
+                200:
+                    description: Пользователь вышел успешно
+                401:
+                    description: Нет пользователя с таким токеном (возможно, он уже вышел)
+    /solve/?:
+        post:
+            description: Пользователь решил задачу
+            parameters:
+            - name: body
+              in: body
+              required: true
+              schema:
+                  $ref: '#/definitions/TaskIdObject'
+            responses:
+                200:
+                    description: Сделана запись о том, что пользователь решил задачу
+                401:
+                    description: Нет пользователя с таким токеном
+                422:
+                    description: Пользователь уже решил эту задачу
+    /propose/?:
+        post:
+            description: Пользователь предложил задачу
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                    $ref: '#/definitions/TaskIdObject'
+            responses:
+                200:
+                    description: Сделана запись о том, что пользователь предложил задачу
+        delete:
+            description: Предложенная пользователем задача была либо опубликована, либо отклонена
+            parameters:
+              - name: body
+                in: body
+                required: true
+                schema:
+                  $ref: '#/definitions/TaskIdObject'
+            responses:
+                200:
+                    description: Удалена отметка о том, что пользователь предлагал эту задачу, теперь он может предложить новую
+    /statistics/?:
+        get:
+            parameters:
+            - name: detailed
+              in: query
+              type: string
+              enum:
+                - solutions
+                - countries
+                - programming_languages
+            responses:
+                200:
+                    description: qwe
+                    schema:
+                        $ref: '#/definitions/StatisticsObject'
+
+definitions:
+    Login:
+        type: string
+        pattern: ^\w+$
+        minLength: 3
+        maxLength: 32
+    Password:
+        type: string
+        pattern: ^\w+$
+        minLength: 3
+        maxLength: 32
+    Token:
+        description: Токен для авторизации пользователя в формате bson.ObjectId
+        type: string
+        pattern: ^\w{24}$
+    Solution:
+        type: object
+        properties:
+            task_id:
+                type: integer
+            submitted:
+                description: Дата-время в формате ISO-8601
+                type: string
+        required:
+          - task_id
+          - submitted
+        additionalProperties: false
+    User:
+        type: object
+        properties:
+            login:
+                $ref: '#/definitions/Login'
+            password:
+                $ref: '#/definitions/Password'
+            admin:
+                type: boolean
+            solutions:
+                type: array
+                items:
+                    $ref: '#/definitions/Solution'
+            solutions_count:
+                type: integer
+            country:
+                type: string
+            programming_language:
+                type: string
+            email:
+                type: string
+            phone:
+                type: string
+            proposed_task_id:
+                type: integer
+        required:
+          - login
+          - password
+          - solutions
+          - solutions_count
+        additionalProperties: false
+    Statistics:
+        type: object
+        properties:
+            users:
+                type: integer
+            countries:
+                type: integer
+            programming_languages:
+                type: integer
+            total_solutions:
+                type: integer
+            average_solutions:
+                type: number
+            detailed_countries:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        country:
+                            type: string
+                        users:
+                            type: integer
+                        average_solutions:
+                            type: number
+                    required:
+                    - country
+                    - users
+                    - average_solutions
+                    additionalProperties: false
+            detailed_programming_languages:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        programming_language:
+                            type: string
+                        users:
+                            type: integer
+                        average_solutions:
+                            type: number
+                    required:
+                    - programming_language
+                    - users
+                    - average_solutions
+                    additionalProperties: false
+            detailed_solutions:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        number_of_tasks:
+                            type: integer
+                        users_solved_exactly:
+                            type: integer
+                        users_solved_at_least:
+                            type: integer
+                    required:
+                    - number_of_tasks
+                    - users_solved_exactly
+                    - users_solved_at_least
+                    additionalProperties: false
+        required:
+          - users
+          - countries
+          - programming_languages
+          - total_solutions
+          - average_solutions
+        additionalProperties: false
+
+    LoginPasswordRequest:
+        type: object
+        properties:
+            login:
+                $ref: '#/definitions/Login'
+            password:
+                $ref: '#/definitions/Password'
+        required:
+          - login
+          - password
+        additionalProperties: false
+    ChangeAccountInfoRequest:
+        type: object
+        properties:
+            login:
+                type: string
+            password:
+                type: string
+            country:
+                type: string
+            programming_language:
+                type: string
+            email:
+                type: string
+            phone:
+                type: string
+        additionalProperties: false
+
+    TokenObject:
+        type: object
+        properties:
+            token:
+                $ref: '#/definitions/Token'
+        required:
+          - token
+        additionalProperties: false
+    TaskIdObject:
+        type: object
+        properties:
+            task_id:
+                type: integer
+        required:
+          - task_id
+        additionalProperties: false
+    UserObject:
+        type: object
+        properties:
+            user:
+                $ref: '#/definitions/User'
+        required:
+          - user
+        additionalProperties: false
+    StatisticsObject:
+        type: object
+        properties:
+            statistics:
+                $ref: '#/definitions/Statistics'
+        required:
+        - statistics
+        additionalProperties: false

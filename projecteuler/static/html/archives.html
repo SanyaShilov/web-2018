@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="common-centered">
+    <h1 align="center">Archives</h1>
+</div>
+
+<div class="task-line-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <a href="/archives?sort_by=id&sort_order=asc&solved={{query['solved']}}">
+                    <span class="typcn typcn-arrow-sorted-up"></span>
+                </a>
+                <br>
+                <a>ID</a>
+                <br>
+                <a href="/archives?sort_by=id&sort_order=desc&solved={{query['solved']}}">
+                    <span class="typcn typcn-arrow-sorted-down"></span>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <br>
+                <a>Title</a>
+                <br>
+            </div>
+            <div class="col-md-2">
+                <a href="/archives?sort_by=solved_by&sort_order=asc&solved={{query['solved']}}">
+                    <span class="typcn typcn-arrow-sorted-up"></span>
+                </a>
+                <br>
+                <a>Solved by</a>
+                <br>
+                <a href="/archives?sort_by=solved_by&sort_order=desc&solved={{query['solved']}}">
+                    <span class="typcn typcn-arrow-sorted-down"></span>
+                </a>
+            </div>
+            <div class="col-md-1">
+                <a href="/archives?sort_by=difficulty&sort_order=asc&solved={{query['solved']}}">
+                    <span class="typcn typcn-arrow-sorted-up"></span>
+                </a>
+                <br>
+                <a>Difficulty</a>
+                <br>
+                <a href="/archives?sort_by=difficulty&sort_order=desc&solved={{query['solved']}}">
+                    <span class="typcn typcn-arrow-sorted-down"></span>
+                </a>
+            </div>
+            {% if user %}
+            <div class="col-md-2">
+                <a href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved=all">all</a>
+                <br>
+                <a>Solved by you</a>
+                <br>
+                <a href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved=yes">yes</a>
+                <a> / </a>
+                <a href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved=no">no</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% for task in tasks %}
+<div class="task-line">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <a>{{task['id']}}</a>
+            </div>
+            <div class="col-md-6">
+                <a href="/task?id={{task['id']}}">{{task['title']}}</a>
+            </div>
+            <div class="col-md-2">
+                <a>{{task['solved_by']}}</a>
+            </div>
+            <div class="col-md-1">
+                <a>{{task['difficulty']}}</a>
+            </div>
+            {% if user %}
+            <div class="col-md-2">
+                {% if task['solved_by_you'] %}
+                    <span class="typcn typcn-tick"></span>
+                {% else %}
+                    <span class="typcn typcn-times"></span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div style="margin-bottom: 100px"></div>
+
+<div class="my-pagination-1">
+    <nav class="my-pagination-2">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved={{query['solved']}}&page=1">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   {% if page != 1 %}
+                   href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved={{query['solved']}}&page={{page-1}}"
+                   {% endif %}
+                >
+                <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link">{{page}}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   {% if page != last_page %}
+                   href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved={{query['solved']}}&page={{page+1}}"
+                   {% endif %}
+                >
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="/archives?sort_by={{query['sort_by']}}&sort_order={{query['sort_order']}}&solved={{query['solved']}}&page={{last_page}}">{{last_page}}</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css"/>
+
+{% endblock %}

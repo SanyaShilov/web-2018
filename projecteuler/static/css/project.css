@@ -1,0 +1,117 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background-color: black;
+}
+
+.my-nav-item {
+    margin: 5px;
+}
+
+.my-select {
+    width: 100%;
+}
+
+.my-centered {
+    display: block;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 640px;
+}
+
+body {
+  padding-bottom: 40px;
+}
+
+.my-form-small {
+  max-width: 600px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.my-form-big {
+  max-width: 1200px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+    margin: auto;
+}
+
+.btn {
+  margin-bottom: 10px;
+}
+
+.task-line {
+    text-align: center;
+    border: 1px solid black;
+    padding: 10px;
+    margin: auto;
+    max-width: 1200px;
+}
+
+.task-table {
+    margin-bottom: 100px;
+}
+
+.task {
+    padding: 10px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.answer {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    max-width: 1200px;
+}
+
+.bordered {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.task-line-header {
+    text-align: center;
+    border: 5px solid black;
+    padding: 10px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.my-pagination-1 {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+}
+
+.my-pagination-2 {
+    position: relative;
+    left: -50%;
+}
+
+.common-centered {
+    max-width: 1200px;
+    margin: 20px auto;
+}

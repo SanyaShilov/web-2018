@@ -1,0 +1,67 @@
+{
+  "tasks": [
+    {
+      "_id": 1,
+      "title": "title1",
+      "text": "text1",
+      "answer": 1,
+      "difficulty": 25,
+      "solved_by": 1,
+      "published": {"$date": "2018-10-06T12:34:56"}
+    },
+    {
+      "_id": 2,
+      "title": "title2",
+      "text": "text2",
+      "answer": 2,
+      "difficulty": 35,
+      "solved_by": 0,
+      "published": {"$date": "2018-10-07T12:34:56"}
+    }
+  ],
+  "proposed_tasks": [
+    {
+      "_id": 1,
+      "title": "title1",
+      "text": "text1",
+      "answer": 1,
+      "difficulty": 25,
+      "proposed": {"$date": "2018-10-06T12:34:56"}
+    },
+    {
+      "_id": 2,
+      "title": "title2",
+      "text": "text2",
+      "answer": 2,
+      "difficulty": 35,
+      "proposed": {"$date": "2018-10-07T12:34:56"}
+    }
+  ],
+  "users": [
+    {
+      "_id": {"$oid": "5be131de831372a205537fd5"},
+      "login": "login0",
+      "password": "password0",
+      "solutions": [],
+      "solutions_count": 0,
+      "programming_language": "C++"
+    },
+    {
+      "_id": {"$oid": "5be12c3c831372a205537f52"},
+      "login": "login1",
+      "password": "password1",
+      "solutions": [
+        {
+          "task_id": 1,
+          "submitted": {"$date": "2018-11-06T12:34:56"}
+        }
+      ],
+      "solutions_count": 1,
+      "country": "Russia",
+      "programming_language": "Python",
+      "proposed_task_id": 2,
+      "admin": true,
+      "token": "5be12c3c4b3e4d019fa99fa3"
+    }
+  ]
+}

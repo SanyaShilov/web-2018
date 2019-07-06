@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<form class="my-form-big" method="post" action="/propose">
+    {% if proposed_task %}
+    <input type="hidden" name="id" value="{{proposed_task['id']}}" />
+    {% endif %}
+    <h1 align="center">Propose</h1>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="inputTitle" placeholder="Title" name="title" required
+                       {% if proposed_task %}
+                       value="{{proposed_task['title']}}"
+                       {% endif %}
+                >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <textarea class="form-control" id="inputText" placeholder="Text" name="text" rows="10" required
+                >{% if proposed_task %}{{proposed_task['text']}}{% endif %}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row" style="max-width: 600px; margin: auto">
+            <div class="col-md-3">
+                <label for="inputAnswer">Answer</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="inputAnswer" placeholder="Answer" name="answer" required
+                       {% if proposed_task %}
+                       value="{{proposed_task['answer']}}"
+                       {% endif %}
+                >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row" style="max-width: 600px; margin: auto">
+            <div class="col-md-3">
+                <label for="inputDifficulty">Difficulty</label>
+            </div>
+            <div class="col-md-9">
+                <input type="number" step="1" class="form-control" id="inputDifficulty" name="difficulty" required min="1" max="100"
+                       {% if proposed_task %}
+                       value="{{proposed_task['difficulty']}}"
+                       {% else %}
+                       value="1"
+                       {% endif %}
+                >
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" style="max-width: 600px; margin: auto"
+        >{% if proposed_task %}Update{% else %}Propose{% endif %}</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

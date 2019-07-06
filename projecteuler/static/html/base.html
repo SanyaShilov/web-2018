@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'head.html' %}
+
+    <body>
+        {% if user %}
+            {% if user['admin'] %}
+                {% include 'navbar_admin.html' %}
+            {% else %}
+                {% include 'navbar_user.html' %}
+            {% endif %}
+        {% else %}
+            {% include 'navbar_unauthorized.html' %}
+        {% endif %}
+
+        {% block main %}
+
+        {% endblock %}
+
+        {% include 'footer.html' %}
+  </body>
+</html>
